@@ -51,6 +51,7 @@ extension ViewController: WKPennLoginDelegate {
 ```
 
 ## Platform Auth
+To communicate with any account-specific Penn Labs resources, you must include an access token in your request.
 ```
 WKPennNetworkManager.instance.getAccessToken { (token) in
     guard let token = token else {
