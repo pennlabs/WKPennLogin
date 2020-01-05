@@ -16,4 +16,12 @@ public class WKPennLogin {
         WKPennLogin.clientID = clientID
         WKPennLogin.redirectURI = redirectURI
     }
+    
+    public static var isLoggedIn: Bool {
+        WKPennNetworkManager.instance.hasRefreshToken()
+    }
+    
+    public static func logout() {
+        WKPennNetworkManager.instance.clearRefreshToken()
+    }
 }

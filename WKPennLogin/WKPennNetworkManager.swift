@@ -204,11 +204,11 @@ extension WKPennNetworkManager {
         return UserDefaults.standard.string(forKey: refreshKey)
     }
     
-    public func clearRefreshToken() {
+    internal func clearRefreshToken() {
         UserDefaults.standard.removeObject(forKey: refreshKey)
     }
     
-    public func hasRefreshToken() -> Bool {
+    internal func hasRefreshToken() -> Bool {
         return getRefreshToken() != nil
     }
 }
