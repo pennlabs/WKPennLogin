@@ -1,5 +1,5 @@
 # WKPennLogin
-An iOS library for logging users into Platform.
+An iOS library for logging users into the Penn Labs platform.
 
 # Installation
 
