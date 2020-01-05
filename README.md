@@ -62,7 +62,7 @@ WKPennNetworkManager.instance.getAccessToken { (token) in
     let url = URL(string: <TARGET URL>)!
     let request = URLRequest(url: url, accessToken: token)
     
-    ... Continue request as usual
+    // ... Continue making request
 }
 ```
 
