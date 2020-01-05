@@ -1,7 +1,25 @@
 # WKPennLogin
 An iOS library for logging users into Platform.
 
-# Example
+# Installation
+
+## [CocoaPods](http://cocoapods.org)
+
+To integrate `WKZombie` into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+use_frameworks!
+
+pod 'WKPennLogin', :git => 'https://github.com/pennlabs/WKPennLogin', :branch => 'master'
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
+# Example Usage
 ```
 import UIKit
 import WKPennLogin
