@@ -25,7 +25,7 @@ public struct PennUser: Codable {
 public extension URLRequest {
     // Sets the appropriate header field given an access token
     // NOTE: Should ONLY be used for requests to Labs servers. Otherwise, access token will be compromised.
-    public init(url: URL, accessToken: AccessToken) {
+    init(url: URL, accessToken: AccessToken) {
         self.init(url: url)
         // Authorization headers are restricted on iOS and not supposed to be set. They can be removed at any time.
         // Thus, we et an X-Authorization header to carry the bearer token in addition to the regular Authorization header.
