@@ -22,7 +22,7 @@ $ pod install
 # Usage
 
 ## Setup
-Set your client ID immediately when the app loads. Include the following ine in `didFinishLaunchingWithOptions` in `AppDelegate.swift`:
+Set up your credentials when the app first loads. Include the following ine in `didFinishLaunchingWithOptions` in `AppDelegate.swift`:
 ```swift
 WKPennLogin.setupCredentials(clientID: <CLIENT ID>, redirectURI: <REDIRECT URI>)
 ```
