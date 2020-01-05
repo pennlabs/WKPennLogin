@@ -49,6 +49,7 @@
 		21D5E13F23C17D8700B331CC /* WKPennLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPennLogin.swift; sourceTree = "<group>"; };
 		21D5E18523C1A5B600B331CC /* WKPennNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPennNetworkManager.swift; sourceTree = "<group>"; };
 		21D5E18723C1A60D00B331CC /* WKPennLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPennLoginController.swift; sourceTree = "<group>"; };
+		21D5E18923C22F1E00B331CC /* WKPennLogin.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = WKPennLogin.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +81,7 @@
 		21D5E10323C17D1000B331CC = {
 			isa = PBXGroup;
 			children = (
+				21D5E18923C22F1E00B331CC /* WKPennLogin.podspec */,
 				21D5E10F23C17D1000B331CC /* WKPennLogin */,
 				21D5E11A23C17D1000B331CC /* WKPennLoginTests */,
 				21D5E12C23C17D4400B331CC /* WKPennLoginExamples */,
