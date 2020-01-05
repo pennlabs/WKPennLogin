@@ -64,3 +64,19 @@ WKPennNetworkManager.instance.getAccessToken { (token) in
     ... Continue request as usual
 }
 ```
+
+## Error Handling (Optional)
+```
+extension ViewController: WKPennLoginDelegate {
+    func handleError(error: WKPennLoginError) {
+        switch error {
+        case .missingCredentials:
+            // Missing credentials
+        case .invalidCredentials:
+            // Invalid credential
+        case .platformAuthError:
+            // Unable to authenticate with the Penn Labs platform.
+        }
+    }
+}
+```
