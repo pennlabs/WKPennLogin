@@ -17,7 +17,7 @@ Pod::Spec.new do |spec|
 
   spec.name         = "WKPennLogin"
   spec.version      = "1.0"
-  spec.summary      = "A short description of WKPennLogin."
+  spec.summary      = "A Penn Login and Penn Labs Platform authentication library."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -64,10 +64,10 @@ This CocoaPods library allows you to log into the Penn Labs Platform using Pennk
   #
 
   # spec.platform     = :ios
-  spec.platform     = :ios, "9.0"
+  # spec.platform     = :iOS, "9.0"
 
   #  When using multiple platforms
-  # spec.ios.deployment_target = "5.0"
+  spec.ios.deployment_target = "9.0"
   # spec.osx.deployment_target = "10.7"
   # spec.watchos.deployment_target = "2.0"
   # spec.tvos.deployment_target = "9.0"
