@@ -8,12 +8,12 @@
 
 import Foundation
 
-public struct AccessToken: Codable {
+public struct WKAccessToken: Codable {
     let value: String
     let expiration: Date
 }
 
-public struct PennUser: Codable {
+public struct WKPennUser: Codable {
     let firstName: String
     let lastName: String
     let pennid: Int
@@ -25,7 +25,7 @@ public struct PennUser: Codable {
 public extension URLRequest {
     // Sets the appropriate header field given an access token
     // NOTE: Should ONLY be used for requests to Labs servers. Otherwise, access token will be compromised.
-    init(url: URL, accessToken: AccessToken) {
+    init(url: URL, accessToken: WKAccessToken) {
         self.init(url: url)
         // Authorization headers are restricted on iOS and not supposed to be set. They can be removed at any time.
         // Thus, we et an X-Authorization header to carry the bearer token in addition to the regular Authorization header.
@@ -39,7 +39,7 @@ public class WKPennNetworkManager: NSObject {
     public static let instance = WKPennNetworkManager()
     private override init() {}
     
-    fileprivate var currentAccessToken: AccessToken?
+    fileprivate var currentAccessToken: WKAccessToken?
 }
 
 // MARK: - Initiate Authentication
@@ -47,7 +47,7 @@ extension WKPennNetworkManager {
     /// Input: One-time code from login
     /// Output: Temporary access token
     /// Saves refresh token in keychain for future use
-    internal func authenticate(code: String, codeVerifier: String, _ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
+    internal func authenticate(code: String, codeVerifier: String, _ callback: @escaping (_ accessToken: WKAccessToken?) -> Void) {
         let url = URL(string: "https://platform.pennlabs.org/accounts/token/")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -75,7 +75,7 @@ extension WKPennNetworkManager {
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 if let result = try? decoder.decode(ResponseData.self, from: data) {
                     let expiration = Calendar.current.date(byAdding: .second, value: result.expiresIn, to: Date())!
-                    let accessToken = AccessToken(value: result.accessToken, expiration: expiration)
+                    let accessToken = WKAccessToken(value: result.accessToken, expiration: expiration)
                     self.saveRefreshToken(token: result.refreshToken)
                     self.currentAccessToken = accessToken
                     callback(accessToken)
@@ -90,7 +90,7 @@ extension WKPennNetworkManager {
 
 // MARK: - Get + Refresh Access Token
 extension WKPennNetworkManager {
-    public func getAccessToken(_ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
+    public func getAccessToken(_ callback: @escaping (_ accessToken: WKAccessToken?) -> Void) {
         if let accessToken = self.currentAccessToken, Date() < accessToken.expiration {
             callback(accessToken)
         } else {
@@ -98,7 +98,7 @@ extension WKPennNetworkManager {
         }
     }
     
-    fileprivate func refreshAccessToken(_ callback: @escaping (_ accessToken: AccessToken?) -> Void ) {
+    fileprivate func refreshAccessToken(_ callback: @escaping (_ accessToken: WKAccessToken?) -> Void ) {
         guard let refreshToken = self.getRefreshToken() else {
             callback(nil)
             return
@@ -130,7 +130,7 @@ extension WKPennNetworkManager {
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
                     if let result = try? decoder.decode(ResponseData.self, from: data) {
                         let expiration = Calendar.current.date(byAdding: .second, value: result.expiresIn, to: Date())!
-                        let accessToken = AccessToken(value: result.accessToken, expiration: expiration)
+                        let accessToken = WKAccessToken(value: result.accessToken, expiration: expiration)
                         self.saveRefreshToken(token: result.refreshToken)
                         self.currentAccessToken = accessToken
                         callback(accessToken)
@@ -159,7 +159,7 @@ extension WKPennNetworkManager {
 
 // MARK: - Retrieve Account
 extension WKPennNetworkManager {
-    public func getUserInfo(accessToken: AccessToken, _ callback: @escaping (_ user: PennUser?) -> Void) {
+    public func getUserInfo(accessToken: WKAccessToken, _ callback: @escaping (_ user: WKPennUser?) -> Void) {
         let url = URL(string: "https://platform.pennlabs.org/accounts/introspect/")!
         var request = URLRequest(url: url, accessToken: accessToken)
         request.httpMethod = "POST"
@@ -174,7 +174,7 @@ extension WKPennNetworkManager {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let httpResponse = response as? HTTPURLResponse, let data = data, httpResponse.statusCode == 200 {
                 struct ResponseData: Decodable {
-                    let user: PennUser
+                    let user: WKPennUser
                 }
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase

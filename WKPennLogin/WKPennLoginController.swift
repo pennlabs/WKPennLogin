@@ -20,7 +20,7 @@ public enum WKPennLoginError: Error {
 }
 
 public protocol WKPennLoginDelegate {
-    func handleLogin(user: PennUser)
+    func handleLogin(user: WKPennUser)
     func handleError(error: WKPennLoginError)
 }
 
