@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "WKPennLogin"
-  spec.version      = "1.3"
+  spec.version      = "1.3.1"
   spec.summary      = "A Penn Login and Penn Labs Platform authentication library."
 
   # This description is used to generate tags and improve search results.
