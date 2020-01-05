@@ -24,7 +24,7 @@ public protocol WKPennLoginDelegate {
     func handleError(error: WKPennLoginError)
 }
 
-extension WKPennLoginDelegate {
+public extension WKPennLoginDelegate {
     func handleError(error: WKPennLoginError) {
         switch error {
         case .missingCredentials:
