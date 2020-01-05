@@ -1,5 +1,5 @@
 //
-//  PennLoginController.swift
+//  WKPennLoginController.swift
 //  WKPennLogin
 //
 //  Created by Josh Doman on 1/4/20.
@@ -13,18 +13,31 @@ import CommonCrypto
 import CryptoKit
 #endif
 
-public enum PennLoginError: Error {
+public enum WKPennLoginError: Error {
     case missingCredentials
     case invalidCredentials
     case platformAuthError
 }
 
-public protocol PennLoginDelegate {
+public protocol WKPennLoginDelegate {
     func handleLogin(user: PennUser)
-    func handleError(error: PennLoginError)
+    func handleError(error: WKPennLoginError)
 }
 
-public class PennLoginController: UIViewController, WKUIDelegate {
+extension WKPennLoginDelegate {
+    func handleError(error: WKPennLoginError) {
+        switch error {
+        case .missingCredentials:
+            print("WKPennLogin is missing credentials.")
+        case .invalidCredentials:
+            print("WKPennLogin credentials are invalid")
+        case .platformAuthError:
+            print("Unable to authenticate with Penn Labs.")
+        }
+    }
+}
+
+public class WKPennLoginController: UIViewController, WKUIDelegate {
     
     private var urlStr: String {
         return "https://platform.pennlabs.org/accounts/authorize/?response_type=code&client_id=\(clientID)&redirect_uri=\(escapedRedirectURI)&code_challenge_method=S256&code_challenge=\(codeChallenge)&scope=read+introspection&state="
@@ -64,15 +77,11 @@ public class PennLoginController: UIViewController, WKUIDelegate {
         #endif
     }
     
-    private var delegate: PennLoginDelegate!
+    private var delegate: WKPennLoginDelegate!
     
-    convenience public init(delegate: PennLoginDelegate) {
+    convenience public init(delegate: WKPennLoginDelegate) {
         self.init()
         self.delegate = delegate
-        
-        if WKPennLogin.clientID == nil || WKPennLogin.redirectURI == nil {
-            delegate.handleError(error: .missingCredentials)
-        }
     }
         
     override public func viewDidLoad() {
@@ -95,11 +104,15 @@ public class PennLoginController: UIViewController, WKUIDelegate {
         webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         
-        if WKPennLogin.clientID != nil && WKPennLogin.redirectURI != nil {
-            let myURL = URL(string: self.urlStr)!
-            let myRequest = URLRequest(url: myURL)
-            webView.load(myRequest)
+        if WKPennLogin.clientID == nil || WKPennLogin.redirectURI == nil {
+            delegate.handleError(error: .missingCredentials)
+            dismiss(animated: true, completion: nil)
+            return
         }
+        
+        let myURL = URL(string: self.urlStr)!
+        let myRequest = URLRequest(url: myURL)
+        webView.load(myRequest)
     }
     
     private init() {
@@ -112,7 +125,7 @@ public class PennLoginController: UIViewController, WKUIDelegate {
 }
 
 // MARK: - WKNavigationDelegate
-extension PennLoginController: WKNavigationDelegate {
+extension WKPennLoginController: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         guard let response = navigationResponse.response as? HTTPURLResponse, let url = response.url else {
             decisionHandler(.allow)
@@ -128,7 +141,7 @@ extension PennLoginController: WKNavigationDelegate {
             }
             
             // Authenticate code
-            OAuth2NetworkManager.instance.authenticate(code: String(code), codeVerifier: codeVerifier) { (token) in
+            WKPennNetworkManager.instance.authenticate(code: String(code), codeVerifier: codeVerifier) { (token) in
                 guard let token = token else {
                     DispatchQueue.main.async {
                         self.delegate.handleError(error: .platformAuthError)
@@ -138,7 +151,7 @@ extension PennLoginController: WKNavigationDelegate {
                 }
                 
                 // Get user info from Penn Labs Platform
-                OAuth2NetworkManager.instance.getUserInfo(accessToken: token) { (user) in
+                WKPennNetworkManager.instance.getUserInfo(accessToken: token) { (user) in
                     DispatchQueue.main.async {
                         guard let user = user else {
                             self.delegate.handleError(error: .platformAuthError)
@@ -158,7 +171,7 @@ extension PennLoginController: WKNavigationDelegate {
 }
 
 // MARK: - Cancel
-extension PennLoginController {
+extension WKPennLoginController {
     @objc fileprivate func cancel(_ sender: Any) {
         _ = self.resignFirstResponder()
         dismiss(animated: true, completion: nil)
@@ -166,7 +179,7 @@ extension PennLoginController {
 }
 
 // MARK: CommonCrypto SHA256
-extension PennLoginController {
+extension WKPennLoginController {
     fileprivate func commonCryptoSHA256(inputData: Data) -> String {
         // https://www.agnosticdev.com/content/how-use-commoncrypto-apis-swift-5
         var digest = [UInt8](repeating: 0, count:Int(CC_SHA256_DIGEST_LENGTH))

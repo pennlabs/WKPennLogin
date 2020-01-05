@@ -17,8 +17,8 @@
 		21D5E13723C17D4600B331CC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21D5E13623C17D4600B331CC /* Assets.xcassets */; };
 		21D5E13A23C17D4600B331CC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D5E13823C17D4600B331CC /* LaunchScreen.storyboard */; };
 		21D5E14023C17D8700B331CC /* WKPennLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D5E13F23C17D8700B331CC /* WKPennLogin.swift */; };
-		21D5E14223C17E4800B331CC /* OAuth2NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D5E14123C17E4800B331CC /* OAuth2NetworkManager.swift */; };
-		21D5E14423C17E6200B331CC /* PennLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D5E14323C17E6200B331CC /* PennLoginController.swift */; };
+		21D5E18623C1A5B600B331CC /* WKPennNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D5E18523C1A5B600B331CC /* WKPennNetworkManager.swift */; };
+		21D5E18823C1A60D00B331CC /* WKPennLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D5E18723C1A60D00B331CC /* WKPennLoginController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +47,8 @@
 		21D5E13923C17D4600B331CC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21D5E13B23C17D4600B331CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21D5E13F23C17D8700B331CC /* WKPennLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPennLogin.swift; sourceTree = "<group>"; };
-		21D5E14123C17E4800B331CC /* OAuth2NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2NetworkManager.swift; sourceTree = "<group>"; };
-		21D5E14323C17E6200B331CC /* PennLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PennLoginController.swift; sourceTree = "<group>"; };
+		21D5E18523C1A5B600B331CC /* WKPennNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPennNetworkManager.swift; sourceTree = "<group>"; };
+		21D5E18723C1A60D00B331CC /* WKPennLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPennLoginController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +103,8 @@
 				21D5E11023C17D1000B331CC /* WKPennLogin.h */,
 				21D5E11123C17D1000B331CC /* Info.plist */,
 				21D5E13F23C17D8700B331CC /* WKPennLogin.swift */,
-				21D5E14123C17E4800B331CC /* OAuth2NetworkManager.swift */,
-				21D5E14323C17E6200B331CC /* PennLoginController.swift */,
+				21D5E18523C1A5B600B331CC /* WKPennNetworkManager.swift */,
+				21D5E18723C1A60D00B331CC /* WKPennLoginController.swift */,
 			);
 			path = WKPennLogin;
 			sourceTree = "<group>";
@@ -273,9 +273,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21D5E14423C17E6200B331CC /* PennLoginController.swift in Sources */,
+				21D5E18623C1A5B600B331CC /* WKPennNetworkManager.swift in Sources */,
+				21D5E18823C1A60D00B331CC /* WKPennLoginController.swift in Sources */,
 				21D5E14023C17D8700B331CC /* WKPennLogin.swift in Sources */,
-				21D5E14223C17E4800B331CC /* OAuth2NetworkManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

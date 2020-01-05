@@ -1,5 +1,5 @@
 //
-//  OAuth2NetworkManager.swift
+//  WKPennNetworkManager.swift
 //  WKPennLogin
 //
 //  Created by Josh Doman on 1/4/20.
@@ -35,19 +35,19 @@ public extension URLRequest {
     }
 }
 
-public class OAuth2NetworkManager: NSObject {
-    static let instance = OAuth2NetworkManager()
+public class WKPennNetworkManager: NSObject {
+    static let instance = WKPennNetworkManager()
     private override init() {}
     
     fileprivate var currentAccessToken: AccessToken?
 }
 
 // MARK: - Initiate Authentication
-public extension OAuth2NetworkManager {
+extension WKPennNetworkManager {
     /// Input: One-time code from login
     /// Output: Temporary access token
     /// Saves refresh token in keychain for future use
-    public func authenticate(code: String, codeVerifier: String, _ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
+    internal func authenticate(code: String, codeVerifier: String, _ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
         let url = URL(string: "https://platform.pennlabs.org/accounts/token/")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -89,7 +89,7 @@ public extension OAuth2NetworkManager {
 }
 
 // MARK: - Get + Refresh Access Token
-extension OAuth2NetworkManager {
+extension WKPennNetworkManager {
     public func getAccessToken(_ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
         if let accessToken = self.currentAccessToken, Date() < accessToken.expiration {
             callback(accessToken)
@@ -158,7 +158,7 @@ extension OAuth2NetworkManager {
 }
 
 // MARK: - Retrieve Account
-extension OAuth2NetworkManager {
+extension WKPennNetworkManager {
     public func getUserInfo(accessToken: AccessToken, _ callback: @escaping (_ user: PennUser?) -> Void) {
         let url = URL(string: "https://platform.pennlabs.org/accounts/introspect/")!
         var request = URLRequest(url: url, accessToken: accessToken)
@@ -191,7 +191,7 @@ extension OAuth2NetworkManager {
 }
 
 // MARK: - Save + Get Refresh Token
-extension OAuth2NetworkManager {
+extension WKPennNetworkManager {
     private var refreshKey: String {
         return "Labs Refresh Token"
     }
