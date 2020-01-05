@@ -25,7 +25,7 @@ Pod::Spec.new do |spec|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   spec.description  = <<-DESC
-This CocoaPods library allows you to log into the Penn Labs Platform using Pennkey.
+                        This CocoaPods library allows you to log into the Penn Labs Platform using Pennkey.
                    DESC
 
   spec.homepage     = "https://github.com/pennlabs/WKPennLogin"
@@ -52,10 +52,8 @@ This CocoaPods library allows you to log into the Penn Labs Platform using Pennk
   #  profile URL.
   #
 
-  spec.author             = { "Josh" => "jsdoman97@gmail.com" }
-  # Or just: spec.author    = "Josh"
+  spec.author             = { "Josh Doman" => "joshsdoman@gmail.com" }
   # spec.authors            = { "Josh" => "jsdoman97@gmail.com" }
-  # spec.social_media_url   = "https://twitter.com/Josh"
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -90,8 +88,8 @@ This CocoaPods library allows you to log into the Penn Labs Platform using Pennk
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "WKPennLogin/*.swift"
-  # spec.exclude_files = "Classes/Exclude"
+  spec.source_files  = "WKPennLogin/*.{swift}"
+  spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
 
@@ -133,5 +131,7 @@ This CocoaPods library allows you to log into the Penn Labs Platform using Pennk
 
   # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # spec.dependency "JSONKit", "~> 1.4"
+
+  spec.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.1' }
 
 end
