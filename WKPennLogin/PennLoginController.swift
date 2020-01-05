@@ -15,7 +15,7 @@ import CryptoKit
 
 typealias PennLoginCompletion = (_ user: PennUser?) -> Void
 
-class PennLoginController: UIViewController, WKUIDelegate {
+public class PennLoginController: UIViewController, WKUIDelegate {
     
     private var urlStr: String {
         return "https://platform.pennlabs.org/accounts/authorize/?response_type=code&client_id=\(clientID)&redirect_uri=\(escapedRedirectURI)&code_challenge_method=S256&code_challenge=\(codeChallenge)&scope=read+introspection&state="
