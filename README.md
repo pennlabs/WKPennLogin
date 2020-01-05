@@ -22,13 +22,13 @@ $ pod install
 # Usage
 
 ## Setup
-Set your client ID immediately when the app loads. Include the following ine in `didFinishLaunchingWithOptions` in `AppDelegate.swift`:
-```
+Set up your credentials when the app first loads. Include the following ine in `didFinishLaunchingWithOptions` in `AppDelegate.swift`:
+```swift
 WKPennLogin.setupCredentials(clientID: <CLIENT ID>, redirectURI: <REDIRECT URI>)
 ```
 
 ## Login
-```
+```swift
 import UIKit
 import WKPennLogin
 
@@ -52,22 +52,33 @@ extension ViewController: WKPennLoginDelegate {
 
 ## Platform Auth
 To communicate with any account-specific Penn Labs resources, you must include an access token in your request.
-```
+```swift
 WKPennNetworkManager.instance.getAccessToken { (token) in
     guard let token = token else {
-        // User is not logged in
+        // User is unable to authenticate with the Penn Labs platform
         return
     }
     
     let url = URL(string: <TARGET URL>)!
     let request = URLRequest(url: url, accessToken: token)
     
-    ... Continue request as usual
+    // ... Continue making request
 }
 ```
 
-## Error Handling (Optional)
+## Check login
+```swift
+if WKPennLogin.isLoggedIn {
+    ...
+}
 ```
+## Logout
+```swift
+WKPennLogin.logout()
+```
+
+## Error Handling (Optional)
+```swift
 extension ViewController: WKPennLoginDelegate {
     func handleError(error: WKPennLoginError) {
         switch error {
