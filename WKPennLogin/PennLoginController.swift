@@ -13,9 +13,9 @@ import CommonCrypto
 import CryptoKit
 #endif
 
-typealias PennLoginCompletion = (_ user: PennUser?) -> Void
+public typealias PennLoginCompletion = (_ user: PennUser?) -> Void
 
-class PennLoginController: UIViewController, WKUIDelegate {
+public class PennLoginController: UIViewController, WKUIDelegate {
     
     private var urlStr: String {
         return "https://platform.pennlabs.org/accounts/authorize/?response_type=code&client_id=\(clientID)&redirect_uri=\(escapedRedirectURI)&code_challenge_method=S256&code_challenge=\(codeChallenge)&scope=read+introspection&state="
@@ -57,12 +57,12 @@ class PennLoginController: UIViewController, WKUIDelegate {
     
     private var completion: PennLoginCompletion!
     
-    convenience init(completion: @escaping PennLoginCompletion) {
+    convenience public init(completion: @escaping PennLoginCompletion) {
         self.init()
         self.completion = completion
     }
         
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
@@ -93,7 +93,7 @@ class PennLoginController: UIViewController, WKUIDelegate {
 
 // MARK: - WKNavigationDelegate
 extension PennLoginController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         guard let response = navigationResponse.response as? HTTPURLResponse, let url = response.url else {
             decisionHandler(.allow)
             return

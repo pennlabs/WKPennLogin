@@ -8,12 +8,12 @@
 
 import Foundation
 
-struct AccessToken: Codable {
+public struct AccessToken: Codable {
     let value: String
     let expiration: Date
 }
 
-struct PennUser: Codable {
+public struct PennUser: Codable {
     let firstName: String
     let lastName: String
     let pennid: Int
@@ -22,7 +22,7 @@ struct PennUser: Codable {
     let affiliation: [String]
 }
 
-extension URLRequest {
+public extension URLRequest {
     // Sets the appropriate header field given an access token
     // NOTE: Should ONLY be used for requests to Labs servers. Otherwise, access token will be compromised.
     init(url: URL, accessToken: AccessToken) {
@@ -35,7 +35,7 @@ extension URLRequest {
     }
 }
 
-class OAuth2NetworkManager: NSObject {
+public class OAuth2NetworkManager: NSObject {
     static let instance = OAuth2NetworkManager()
     private override init() {}
     
@@ -43,11 +43,11 @@ class OAuth2NetworkManager: NSObject {
 }
 
 // MARK: - Initiate Authentication
-extension OAuth2NetworkManager {
+public extension OAuth2NetworkManager {
     /// Input: One-time code from login
     /// Output: Temporary access token
     /// Saves refresh token in keychain for future use
-    func authenticate(code: String, codeVerifier: String, _ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
+    public func authenticate(code: String, codeVerifier: String, _ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
         let url = URL(string: "https://platform.pennlabs.org/accounts/token/")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -90,7 +90,7 @@ extension OAuth2NetworkManager {
 
 // MARK: - Get + Refresh Access Token
 extension OAuth2NetworkManager {
-    func getAccessToken(_ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
+    public func getAccessToken(_ callback: @escaping (_ accessToken: AccessToken?) -> Void) {
         if let accessToken = self.currentAccessToken, Date() < accessToken.expiration {
             callback(accessToken)
         } else {
@@ -159,7 +159,7 @@ extension OAuth2NetworkManager {
 
 // MARK: - Retrieve Account
 extension OAuth2NetworkManager {
-    func getUserInfo(accessToken: AccessToken, _ callback: @escaping (_ user: PennUser?) -> Void) {
+    public func getUserInfo(accessToken: AccessToken, _ callback: @escaping (_ user: PennUser?) -> Void) {
         let url = URL(string: "https://platform.pennlabs.org/accounts/introspect/")!
         var request = URLRequest(url: url, accessToken: accessToken)
         request.httpMethod = "POST"
@@ -204,17 +204,17 @@ extension OAuth2NetworkManager {
         return UserDefaults.standard.string(forKey: refreshKey)
     }
     
-    func clearRefreshToken() {
+    public func clearRefreshToken() {
         UserDefaults.standard.removeObject(forKey: refreshKey)
     }
     
-    func hasRefreshToken() -> Bool {
+    public func hasRefreshToken() -> Bool {
         return getRefreshToken() != nil
     }
 }
 
 extension String {
-    static func getPostString(params: [String: Any]) -> String {
+    fileprivate static func getPostString(params: [String: Any]) -> String {
         let characterSet = CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
         let parameterArray = params.map { key, value -> String in
             let escapedKey = key.addingPercentEncoding(withAllowedCharacters: characterSet) ?? ""

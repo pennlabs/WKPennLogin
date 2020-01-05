@@ -8,11 +8,11 @@
 
 import Foundation
 
-class WKPennLogin {
+public class WKPennLogin {
     static var clientID: String!
     static var redirectURI: String!
     
-    static func setupCredentials(clientID: String, redirectURI: String) {
+    public static func setupCredentials(clientID: String, redirectURI: String) {
         WKPennLogin.clientID = clientID
         WKPennLogin.redirectURI = redirectURI
     }
