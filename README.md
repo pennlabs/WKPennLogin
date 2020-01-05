@@ -45,7 +45,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: WKPennLoginDelegate {
-    func handleLogin(user: PennUser) {
+    func handleLogin(user: WKPennUser) {
         print(user)
     }
 }
