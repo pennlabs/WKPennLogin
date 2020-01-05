@@ -20,6 +20,8 @@ $ pod install
 ```
 
 # Example Usage
+
+## Login
 ```
 import UIKit
 import WKPennLogin
@@ -46,5 +48,20 @@ extension ViewController: WKPennLoginDelegate {
     func handleLogin(user: PennUser) {
         print(user)
     }
+}
+```
+
+## Platform Auth
+```
+WKPennNetworkManager.instance.getAccessToken { (token) in
+    guard let token = token else {
+        // User is not logged in
+        return
+    }
+    
+    let url = URL(string: <TARGET URL>)!
+    let request = URLRequest(url: url, accessToken: token)
+    
+    ... Continue request as usual
 }
 ```
