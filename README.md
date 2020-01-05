@@ -55,7 +55,7 @@ To communicate with any account-specific Penn Labs resources, you must include a
 ```swift
 WKPennNetworkManager.instance.getAccessToken { (token) in
     guard let token = token else {
-        // User is not logged in
+        // User is unable to authenticate with the Penn Labs platform
         return
     }
     
