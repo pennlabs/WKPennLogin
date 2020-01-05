@@ -66,6 +66,17 @@ WKPennNetworkManager.instance.getAccessToken { (token) in
 }
 ```
 
+## Check login
+```
+if WKPennLogin.isLoggedIn {
+    ...
+}
+```
+## Logout
+```
+WKPennLogin.logout()
+```
+
 ## Error Handling (Optional)
 ```
 extension ViewController: WKPennLoginDelegate {
