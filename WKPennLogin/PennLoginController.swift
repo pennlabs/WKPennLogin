@@ -8,8 +8,10 @@
 
 import Foundation
 import WebKit
-import CryptoKit
 import CommonCrypto
+#if canImport(CryptoKit)
+import CryptoKit
+#endif
 
 typealias PennLoginCompletion = (_ user: PennUser?) -> Void
 
@@ -38,25 +40,19 @@ class PennLoginController: UIViewController, WKUIDelegate {
     /// The SHA256 hash of the code verifier
     private var codeChallenge: String {
         let inputData = Data(codeVerifier.utf8)
-        if #available(iOS 13, *) {
-            // CryptoKit not available until iOS 13
-            let hashed = SHA256.hash(data: inputData)
-            let hashString = hashed.compactMap { String(format: "%02x", $0) }.joined()
-            return hashString
-        } else {
-            // Use CommonCrypto if CryptoKit not available
-            // https://www.agnosticdev.com/content/how-use-commoncrypto-apis-swift-5
-            var digest = [UInt8](repeating: 0, count:Int(CC_SHA256_DIGEST_LENGTH))
-            _ = inputData.withUnsafeBytes {
-               CC_SHA256($0.baseAddress, UInt32(inputData.count), &digest)
+        #if canImport(CryptoKit)
+            if #available(iOS 13, *) {
+                // CryptoKit not available until iOS 13
+                let hashed = SHA256.hash(data: inputData)
+                let hashString = hashed.compactMap { String(format: "%02x", $0) }.joined()
+                return hashString
+            } else {
+                // Use CommonCrypto if CryptoKit not available
+                return commonCryptoSHA256(inputData: inputData)
             }
-    
-            var sha256String = ""
-            for byte in digest {
-               sha256String += String(format:"%02x", UInt8(byte))
-            }
-            return sha256String
-        }
+        #else
+            return commonCryptoSHA256(inputData: inputData)
+        #endif
     }
     
     private var completion: PennLoginCompletion!
@@ -134,5 +130,22 @@ extension PennLoginController {
     @objc fileprivate func cancel(_ sender: Any) {
         _ = self.resignFirstResponder()
         dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: CommonCrypto SHA256
+extension PennLoginController {
+    fileprivate func commonCryptoSHA256(inputData: Data) -> String {
+        // https://www.agnosticdev.com/content/how-use-commoncrypto-apis-swift-5
+        var digest = [UInt8](repeating: 0, count:Int(CC_SHA256_DIGEST_LENGTH))
+        _ = inputData.withUnsafeBytes {
+           CC_SHA256($0.baseAddress, UInt32(inputData.count), &digest)
+        }
+
+        var sha256String = ""
+        for byte in digest {
+           sha256String += String(format:"%02x", UInt8(byte))
+        }
+        return sha256String
     }
 }

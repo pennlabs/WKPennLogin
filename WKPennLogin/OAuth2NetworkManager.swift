@@ -55,8 +55,8 @@ extension OAuth2NetworkManager {
         let params = [
             "code": code,
             "grant_type": "authorization_code",
-            "client_id": WKPennLogin.clientID,
-            "redirect_uri": WKPennLogin.redirectURI,
+            "client_id": WKPennLogin.clientID!,
+            "redirect_uri": WKPennLogin.redirectURI!,
             "code_verifier": codeVerifier,
         ]
         
@@ -111,7 +111,7 @@ extension OAuth2NetworkManager {
         let params = [
             "refresh_token": refreshToken,
             "grant_type": "refresh_token",
-            "client_id": WKPennLogin.clientID,
+            "client_id": WKPennLogin.clientID!,
         ]
         
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
