@@ -19,7 +19,13 @@ Then, run the following command:
 $ pod install
 ```
 
-# Example Usage
+# Usage
+
+## Setup
+Set your client ID immediately when the app loads. Include the following ine in `didFinishLaunchingWithOptions` in `AppDelegate.swift`:
+```
+WKPennLogin.setupCredentials(clientID: <CLIENT ID>, redirectURI: <REDIRECT URI>)
+```
 
 ## Login
 ```
@@ -28,16 +34,9 @@ import WKPennLogin
 
 class ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        WKPennLogin.setupCredentials(clientID: <CLIENT ID>, redirectURI: <REDIRECT URI>)
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Do any additional setup after loading the view.
         let plc = WKPennLoginController(delegate: self)
         let nvc = UINavigationController(rootViewController: plc)
         present(nvc, animated: true, completion: nil)
