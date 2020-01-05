@@ -8,9 +8,9 @@ An iOS library for logging users into the Penn Labs platform.
 To integrate `WKPennLogin` into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
-use_frameworks!
-
-pod 'WKPennLogin', :git => 'https://github.com/pennlabs/WKPennLogin', :branch => 'master'
+target 'MyApp' do
+  pod 'WKPennLogin'
+end
 ```
 
 Then, run the following command:
