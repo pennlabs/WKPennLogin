@@ -5,7 +5,7 @@ An iOS library for logging users into Platform.
 
 ## [CocoaPods](http://cocoapods.org)
 
-To integrate `WKZombie` into your Xcode project using CocoaPods, specify it in your `Podfile`:
+To integrate `WKPennLogin` into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
 use_frameworks!
