@@ -13,7 +13,16 @@ import CommonCrypto
 import CryptoKit
 #endif
 
-public typealias PennLoginCompletion = (_ user: PennUser?) -> Void
+public enum PennLoginError: Error {
+    case missingCredentials
+    case invalidCredentials
+    case platformAuthError
+}
+
+public protocol PennLoginDelegate {
+    func handleLogin(user: PennUser)
+    func handleError(error: PennLoginError)
+}
 
 public class PennLoginController: UIViewController, WKUIDelegate {
     
@@ -55,11 +64,15 @@ public class PennLoginController: UIViewController, WKUIDelegate {
         #endif
     }
     
-    private var completion: PennLoginCompletion!
+    private var delegate: PennLoginDelegate!
     
-    convenience public init(completion: @escaping PennLoginCompletion) {
+    convenience public init(delegate: PennLoginDelegate) {
         self.init()
-        self.completion = completion
+        self.delegate = delegate
+        
+        if WKPennLogin.clientID == nil || WKPennLogin.redirectURI == nil {
+            delegate.handleError(error: .missingCredentials)
+        }
     }
         
     override public func viewDidLoad() {
@@ -75,11 +88,18 @@ public class PennLoginController: UIViewController, WKUIDelegate {
         webView.navigationDelegate = self
         webView.uiDelegate = self
         webView.translatesAutoresizingMaskIntoConstraints = false
-        self.view = webView
-
-        let myURL = URL(string: self.urlStr)
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        
+        view.addSubview(webView)
+        webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        
+        if WKPennLogin.clientID != nil && WKPennLogin.redirectURI != nil {
+            let myURL = URL(string: self.urlStr)!
+            let myRequest = URLRequest(url: myURL)
+            webView.load(myRequest)
+        }
     }
     
     private init() {
@@ -102,20 +122,32 @@ extension PennLoginController: WKNavigationDelegate {
         if url.absoluteString.contains(WKPennLogin.redirectURI) {
             // Successfully logged in and navigated to redirect URI
             guard let code = url.absoluteString.split(separator: "=").last else {
-                self.completion(nil)
+                self.delegate.handleError(error: .platformAuthError)
+                self.dismiss(animated: true, completion: nil)
                 return
             }
             
             // Authenticate code
             OAuth2NetworkManager.instance.authenticate(code: String(code), codeVerifier: codeVerifier) { (token) in
                 guard let token = token else {
-                    self.completion(nil)
+                    DispatchQueue.main.async {
+                        self.delegate.handleError(error: .platformAuthError)
+                        self.dismiss(animated: true, completion: nil)
+                    }
                     return
                 }
                 
                 // Get user info from Penn Labs Platform
                 OAuth2NetworkManager.instance.getUserInfo(accessToken: token) { (user) in
-                    self.completion(user)
+                    DispatchQueue.main.async {
+                        guard let user = user else {
+                            self.delegate.handleError(error: .platformAuthError)
+                            self.dismiss(animated: true, completion: nil)
+                            return
+                        }
+                        self.delegate.handleLogin(user: user)
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
             decisionHandler(.cancel)
