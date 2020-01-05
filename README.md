@@ -12,7 +12,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .red
         
-        WKPennLogin.setupCredentials(clientID: "CJmaheeaQ5bJhRL0xxlxK3b8VEbLb3dMfUAvI2TN", redirectURI: "https://pennlabs.org/pennmobile/ios/callback/")
+        WKPennLogin.setupCredentials(clientID: <CLIENT ID>, redirectURI: <REDIRECT URI>)
     }
 
     override func viewDidAppear(_ animated: Bool) {
