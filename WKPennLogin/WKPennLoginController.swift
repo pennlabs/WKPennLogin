@@ -132,8 +132,17 @@ extension WKPennLoginController: WKNavigationDelegate {
             return
         }
         
+        if url.absoluteString.contains("platform.pennlabs.org") && response.statusCode == 400 {
+            // Client ID is invalid if Platform returns a 400 error
+            decisionHandler(.cancel)
+            self.delegate.handleError(error: .invalidCredentials)
+            self.dismiss(animated: true, completion: nil)
+            return
+        }
+        
         if url.absoluteString.contains(WKPennLogin.redirectURI) {
             // Successfully logged in and navigated to redirect URI
+            decisionHandler(.cancel)
             guard let code = url.absoluteString.split(separator: "=").last else {
                 self.delegate.handleError(error: .platformAuthError)
                 self.dismiss(animated: true, completion: nil)
@@ -163,7 +172,6 @@ extension WKPennLoginController: WKNavigationDelegate {
                     }
                 }
             }
-            decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
         }
