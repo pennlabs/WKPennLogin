@@ -62,19 +62,23 @@ public class WKPennLoginController: UIViewController, WKUIDelegate {
     /// The SHA256 hash of the code verifier
     private var codeChallenge: String {
         let inputData = Data(codeVerifier.utf8)
+        var challenge: String
         #if canImport(CryptoKit)
             if #available(iOS 13, *) {
                 // CryptoKit not available until iOS 13
-                let hashed = SHA256.hash(data: inputData)
-                let hashString = hashed.compactMap { String(format: "%02x", $0) }.joined()
-                return hashString
+                let digest = SHA256.hash(data: inputData)
+                challenge = Data(Array<UInt8>(digest.makeIterator())).base64EncodedString()
             } else {
                 // Use CommonCrypto if CryptoKit not available
-                return commonCryptoSHA256(inputData: inputData)
+                challenge = commonCryptoSHA256(inputData: inputData)
             }
         #else
-            return commonCryptoSHA256(inputData: inputData)
+            challenge = commonCryptoSHA256(inputData: inputData)
         #endif
+        challenge.removeAll(where: { $0 == "=" })
+        challenge = challenge.replacingOccurrences(of: "+", with: "-")
+        challenge = challenge.replacingOccurrences(of: "/", with: "_")
+        return challenge
     }
     
     private var delegate: WKPennLoginDelegate!
@@ -194,11 +198,6 @@ extension WKPennLoginController {
         _ = inputData.withUnsafeBytes {
            CC_SHA256($0.baseAddress, UInt32(inputData.count), &digest)
         }
-
-        var sha256String = ""
-        for byte in digest {
-           sha256String += String(format:"%02x", UInt8(byte))
-        }
-        return sha256String
+        return Data(Array<UInt8>(digest.makeIterator())).base64EncodedString()
     }
 }
